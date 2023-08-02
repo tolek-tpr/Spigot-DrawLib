@@ -6,45 +6,46 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class DrawLib {
 
-    public static void circle(Location loc, int radius, int step, int startArc, int endArc, Consumer<Location> worker) {
-        final double x = loc.getBlockX() + 0.5;
-        final double y = loc.getY();
-        final double z = loc.getBlockZ() + 0.5;
-        final World w = loc.getWorld();
-        final HashMap<String, Location> locations = new HashMap<>();
-
+    public static Selection circle(Location center, int radius, int step, int startArc, int endArc, Consumer<Location> worker) {
+        final Selection selection = new Selection();
         for (int alpha = startArc; alpha < endArc; alpha += step) {
-            double dx = radius * Math.sin(Math.toRadians(alpha));
-            double dz = radius * Math.cos(Math.toRadians(alpha));
-            String key = (loc.getBlockX() + Math.floor(dx)) + "-" + y + "-" + (loc.getBlockZ() + Math.floor(dz));
-            //for (Player p : Bukkit.getOnlinePlayers()) { p.sendMessage(key); }
-
-            if (locations.containsKey(key))
-                continue;
-            locations.put(key, new Location(w, x + dx, y, z + dz));
-            worker.accept(new Location(w, x + dx, y, z + dz));
+            final double dx = radius * Math.sin(Math.toRadians(alpha));
+            final double dz = radius * Math.cos(Math.toRadians(alpha));
+            selection.add(new Location(center.getWorld(), center.getBlockX() + 0.5 + dx, center.getY(), center.getBlockZ() + 0.5 + dz));
         }
+        selection.getLocations().forEach(worker::accept);
+
+        return selection;
     }
 
-    public static void square(Location loc, double length, boolean fill, BiConsumer<Location, Boolean> worker) {
-        final int x = loc.getBlockX();
-        final int y = loc.getBlockY();
-        final int z = loc.getBlockZ();
+    public static Selection square(Location center, double length, boolean fill, BiConsumer<Location, Boolean> worker) {
+        final int x = center.getX();
+        final int y = center.getY();
+        final int z = center.getZ();
         final double h = length / 2;
-        final World w = loc.getWorld();
 
-        for (double d = -h; d <= h; ++d) {
-            final boolean isVertex = d == -h || d == h;
-            worker.accept(new Location(w, x + d, y, z - h), isVertex);
-            worker.accept(new Location(w, x + d, y, z + h), isVertex);
-            worker.accept(new Location (w, x + h, y, z + d), isVertex);
-            worker.accept(new Location (w, x - h, y, z + d), isVertex);
+        final Selection vertices = new Selection();
+        vertices.add(new Location(center.getWorld(), x - h, y, z - h));
+        vertices.add(new Location(center.getWorld(), x - h, y, z + h));
+        vertices.add(new Location(center.getWorld(), x + h, y, z - h));
+        vertices.add(new Location(center.getWorld(), x + h, y, z + h));
+
+        final Selection edges = new Selection();
+        for (double d = -h + 1; d < h; ++d) {
+            edges.add(new Location(center.getWorld(), x + d, y, z - h));
+            edges.add(new Location(center.getWorld(), x + d, y, z + h));
+            edges.add(new Location (center.getWorld(), x + h, y, z + d));
+            edges.add(new Location (center.getWorld(), x - h, y, z + d));
         }
+
+        vertices.getLocations().forEach(l -> worker.accept(l, true));
+        edges.getLocations().forEach(l -> worker.accept(l, false));
+
+        return Selection.union(vertices, edges);
     }
 
     public static void rectangle(Location loc, double lX, double lZ, boolean fill, Consumer<Location> worker) {
