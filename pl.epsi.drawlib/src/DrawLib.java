@@ -1,31 +1,25 @@
-package me.tolek.vanillaplus.libs;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class DrawLib {
 
-    public static Selection circle(Location center, int radius, int step, int startArc, int endArc, Consumer<Location> worker) {
+    public static Selection circle(Location center, int radius, int step, int startArc, int endArc) {
         final Selection selection = new Selection();
         for (int alpha = startArc; alpha < endArc; alpha += step) {
             final double dx = radius * Math.sin(Math.toRadians(alpha));
             final double dz = radius * Math.cos(Math.toRadians(alpha));
             selection.add(new Location(center.getWorld(), center.getBlockX() + 0.5 + dx, center.getY(), center.getBlockZ() + 0.5 + dz));
         }
-        selection.getLocations().forEach(worker::accept);
-
         return selection;
     }
 
-    public static Selection square(Location center, double length, boolean fill, BiConsumer<Location, Boolean> worker) {
-        final int x = center.getX();
-        final int y = center.getY();
-        final int z = center.getZ();
+    public static Selection square(Location center, double length) {
+        final int x = center.getBlockX();
+        final int y = center.getBlockY();
+        final int z = center.getBlockZ();
         final double h = length / 2;
 
         final Selection vertices = new Selection();
@@ -38,12 +32,9 @@ public class DrawLib {
         for (double d = -h + 1; d < h; ++d) {
             edges.add(new Location(center.getWorld(), x + d, y, z - h));
             edges.add(new Location(center.getWorld(), x + d, y, z + h));
-            edges.add(new Location (center.getWorld(), x + h, y, z + d));
-            edges.add(new Location (center.getWorld(), x - h, y, z + d));
+            edges.add(new Location(center.getWorld(), x + h, y, z + d));
+            edges.add(new Location(center.getWorld(), x - h, y, z + d));
         }
-
-        vertices.getLocations().forEach(l -> worker.accept(l, true));
-        edges.getLocations().forEach(l -> worker.accept(l, false));
 
         return Selection.union(vertices, edges);
     }
