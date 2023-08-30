@@ -1,6 +1,5 @@
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,11 +27,7 @@ public class Selection {
     }
 
     public static String generateLocationKey(final Location l) {
-        return /*l.getWorld().getUID().toString() + */" " + separator + l.getBlockX() + separator + l.getBlockY() + separator + l.getBlockZ();
-    }
-
-    public static String generateLocationKey(final World w, final int x, final int y, final int z) {
-        return /*w.getUID().toString() + */" " + separator + x + separator + y + separator + z;
+        return new StringBuilder().append(l.getBlockX()).append(separator).append(l.getBlockY()).append(separator).append(l.getBlockZ()).toString();
     }
 
     public Set<Location> getLocations() {
@@ -51,16 +46,16 @@ public class Selection {
         return locations.containsKey(generateLocationKey(l));
     }
 
-    public Selection add(Location l) {
+    public Selection add(final Location l) {
         final String k = generateLocationKey(l);
         if (!locations.containsKey(k)) {
             locations.put(k, l);
-            materials.put(k, l.getBlock().getType());
+//            materials.put(k, l.getBlock().getType());
         }
         return this;
     }
 
-    public Selection add(Location l, Material m) {
+    public Selection add(final Location l, final Material m) {
         final String k = generateLocationKey(l);
         if (!locations.containsKey(k)) {
             locations.put(k, l);
@@ -69,22 +64,22 @@ public class Selection {
         return this;
     }
 
-    public Selection add(Selection s) {
+    public Selection add(final Selection s) {
         s.locations.forEach((k, l) -> add(l, s.locations.get(k).getBlock().getType()));
         return this;
     }
 
-    public Selection remove(Location l) {
+    public Selection remove(final Location l) {
         if (contains(l)) locations.remove(generateLocationKey(l));
         return this;
     }
 
-    public Selection remove(Selection s) {
+    public Selection remove(final Selection s) {
         s.locations.forEach((k, l) -> remove(l));
         return this;
     }
 
-    public Selection stroke(Material m) {
+    public Selection stroke(final Material m) {
         locations.forEach((k, l) -> l.getBlock().setType(m));
         return this;
     }
@@ -99,16 +94,16 @@ public class Selection {
         return this;
     }
 
-    public Material getOriginalMaterialAt(Location l) {
+    public Material getOriginalMaterialAt(final Location l) {
         return materials.get(generateLocationKey(l));
     }
 
-    public Selection consume(Consumer<Location> consumer) {
+    public Selection consume(final Consumer<Location> consumer) {
         locations.forEach((k, l) -> consumer.accept(l));
         return this;
     }
 
-    public Selection transform(UnaryOperator<Location> transformer) {
+    public Selection transform(final UnaryOperator<Location> transformer) {
         final Selection target = new Selection();
         locations.forEach((k, l) -> target.add(transformer.apply(l)));
         return target;

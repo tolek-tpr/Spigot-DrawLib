@@ -44,7 +44,7 @@ public class SelectionTest {
         assertTrue(Selection.intersect(s1, s2).isEmpty());
     }
 
-    @Test public void addingRemovingLocationsAndCheckingSizeAndIsEmptyAndContains() {
+    @Test public void addingAndRemovingLocations() {
         final Selection s = new Selection();
         assertTrue(s.isEmpty());
         assertEquals(0, s.size());
@@ -69,7 +69,7 @@ public class SelectionTest {
         assertFalse(s.contains(new Location(world, 1, 1, 1)));
     }
 
-    @Test public void addingRemovingSelections() {
+    @Test public void addingAndRemovingSelections() {
         final Selection s = new Selection().add(new Location(world, 1, 1, 1));
         assertEquals(1, s.size());
 
