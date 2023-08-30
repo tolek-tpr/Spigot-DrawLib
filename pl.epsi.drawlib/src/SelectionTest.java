@@ -1,4 +1,5 @@
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -81,4 +82,14 @@ public class SelectionTest {
         assertEquals(1, s.size());
     }
 
+    @Test public void stroke() {
+        final Location l = new Location(world, 1, 1, 1);
+        l.getBlock().setType(Material.AIR);
+
+        final Selection s = new Selection().add(l);
+        s.stroke(Material.STONE);
+
+        assertEquals(Material.AIR, l.getBlock().getType());
+        assertEquals(Material.STONE, s.getOriginalMaterialAt(l));
+    }
 }

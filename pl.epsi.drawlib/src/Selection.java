@@ -1,4 +1,5 @@
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 
 import java.util.HashMap;
@@ -10,7 +11,9 @@ import java.util.function.UnaryOperator;
 public class Selection {
 
     static final char separator = ':';
+
     protected final HashMap<String, Location> locations = new HashMap<>();
+    protected final HashMap<String, Material> materials = new HashMap<>();
 
     public static Selection union(final Selection s1, final Selection s2) {
         return new Selection().add(s1).add(s2);
@@ -18,8 +21,8 @@ public class Selection {
 
     public static Selection intersect(final Selection s1, final Selection s2) {
         final Selection s = new Selection();
-        s1.getLocations().forEach(l -> {
-            if (s2.contains(l)) s.add(l);
+        s1.locations.forEach((k, l) -> {
+            if (s2.locations.containsKey(k)) s.add(l, s2.materials.containsKey(k) ? s2.materials.get(k) : s1.materials.get(k));
         });
         return s;
     }
@@ -50,12 +53,24 @@ public class Selection {
 
     public Selection add(Location l) {
         final String k = generateLocationKey(l);
-        if (!locations.containsKey(k)) locations.put(k, l);
+        if (!locations.containsKey(k)) {
+            locations.put(k, l);
+            materials.put(k, l.getBlock().getType());
+        }
+        return this;
+    }
+
+    public Selection add(Location l, Material m) {
+        final String k = generateLocationKey(l);
+        if (!locations.containsKey(k)) {
+            locations.put(k, l);
+            materials.put(k, m);
+        }
         return this;
     }
 
     public Selection add(Selection s) {
-        s.locations.forEach((k, l) -> add(l));
+        s.locations.forEach((k, l) -> add(l, s.locations.get(k).getBlock().getType()));
         return this;
     }
 
@@ -67,6 +82,25 @@ public class Selection {
     public Selection remove(Selection s) {
         s.locations.forEach((k, l) -> remove(l));
         return this;
+    }
+
+    public Selection stroke(Material m) {
+        locations.forEach((k, l) -> l.getBlock().setType(m));
+        return this;
+    }
+
+    public Selection erase() {
+        locations.forEach((k, l) -> l.getBlock().setType(Material.AIR));
+        return this;
+    }
+
+    public Selection restore() {
+        locations.forEach((k, l) -> l.getBlock().setType(materials.get(k)));
+        return this;
+    }
+
+    public Material getOriginalMaterialAt(Location l) {
+        return materials.get(generateLocationKey(l));
     }
 
     public Selection consume(Consumer<Location> consumer) {
@@ -82,7 +116,7 @@ public class Selection {
 
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        locations.forEach((k, l) -> { sb.append(k + " "); });
+        locations.forEach((k, l) -> { sb.append(k).append(" "); });
         return sb.toString();
     }
 }
