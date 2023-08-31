@@ -2,6 +2,7 @@ package pl.epsi.drawlib;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import pl.epsi.drawlib.transformations.Transformation;
 
 import java.util.HashMap;
@@ -84,6 +85,11 @@ public class Selection {
 
     public Selection stroke(final Material m) {
         locations.forEach((k, l) -> l.getBlock().setType(m));
+        return this;
+    }
+
+    public Selection sprinkle(final Particle p, final double amount) {
+        locations.forEach((k, l) -> l.getWorld().spawnParticle(l, p, amount));
         return this;
     }
 
