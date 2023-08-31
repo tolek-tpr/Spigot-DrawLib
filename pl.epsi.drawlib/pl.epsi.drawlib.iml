@@ -59,5 +59,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-api:5.9.2" level="project" />
   </component>
 </module>
