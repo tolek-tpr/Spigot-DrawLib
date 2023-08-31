@@ -1,5 +1,8 @@
+package pl.epsi.drawlib;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
+import pl.epsi.drawlib.transformations.Transformation;
 
 import java.util.HashMap;
 import java.util.HashSet;

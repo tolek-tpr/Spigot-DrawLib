@@ -5,14 +5,27 @@ Spigot DrawLib allows you to draw shapes in Minecraft as well as transform
 and animate those shapes. Below you will find a few examples of what this gem
 is capable of.
 
-How it works
-------------
+Quick examples
+--------------
+
+You can use the facade class Draw to draw basic shapes. It's dead simple:
+```Java
+import org.bukkit.Location;
+import org.bukkit.Material;
+import pl.epsi.drawlib.*;
+
+Draw.circle(player.getLocation(), 15, Material.STONE);
+Draw.square(player.getLocation(), 10, Material.STONE);
+```
+
+Advanced usage
+--------------
 
 1. Design a shape. It could be as simple as line, circle or square, but it could
    go as far as a shape composed of multiple simple shapes. You can keep composing
    shapes endlessly.
 ```Java
-Circle c = new Circle(player.getLocation(), 15, 10);
+Circle c = new Circle(player.getLocation(), 15);
 ```
 
 2. Get a selection of blocks circumscribing the designed shape.

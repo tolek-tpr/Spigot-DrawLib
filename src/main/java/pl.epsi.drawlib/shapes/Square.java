@@ -1,4 +1,7 @@
+package pl.epsi.drawlib.shapes;
+
 import org.bukkit.Location;
+import pl.epsi.drawlib.Selection;
 
 public class Square {
 

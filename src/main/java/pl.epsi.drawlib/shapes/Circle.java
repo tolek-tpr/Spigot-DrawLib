@@ -1,5 +1,8 @@
+package pl.epsi.drawlib.shapes;
+
 import org.bukkit.Location;
 import org.bukkit.World;
+import pl.epsi.drawlib.Selection;
 
 public class Circle implements Shape {
 

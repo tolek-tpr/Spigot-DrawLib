@@ -1,5 +1,8 @@
+package pl.epsi.drawlib.shapes;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+import pl.epsi.drawlib.Selection;
 
 public class Line {
 

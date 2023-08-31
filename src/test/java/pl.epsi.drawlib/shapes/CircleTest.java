@@ -1,7 +1,11 @@
+package pl.epsi.drawlib.shapes;
+
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
+import pl.epsi.drawlib.Selection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,7 +39,7 @@ public class CircleTest {
     @Test public void selectNotFilled() {
         final Circle c = new Circle(new Location(world, 0, 0, 0), 20);
         final Selection s = c.select(false);
-        assertEquals(112, s.size());
+        Assert.assertEquals(112, s.size());
         assertFalse(s.contains(new Location(world, 0, 0, 0)));
         assertTrue(s.contains(new Location(world, -20, 0, 0)));
         assertTrue(s.contains(new Location(world, 20, 0, 0)));
