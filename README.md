@@ -30,7 +30,7 @@ s.stroke(Material.STONE);
 ```Java
 s.restore();
 Transformation t = new Mover(0, 1, 0); // moves up along Y axis
-Selection s2 = s.transform(t.transformer());
+Selection s2 = s.transform(t.getTransformer());
 s2.stroke(Material.STONE);
 ```
 

@@ -1,5 +1,5 @@
 public interface Shape {
 
-    public Selection select(boolean filled);
+    Selection select(boolean filled);
 
 }

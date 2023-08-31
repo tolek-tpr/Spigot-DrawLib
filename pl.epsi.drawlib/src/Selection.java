@@ -109,6 +109,10 @@ public class Selection {
         return target;
     }
 
+    public Selection transform(final Transformation transformation) {
+        return transform(transformation.getTransformer());
+    }
+
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         locations.forEach((k, l) -> { sb.append(k).append(" "); });
