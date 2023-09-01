@@ -31,7 +31,7 @@ public class Selection {
     }
 
     public static String generateLocationKey(final Location l) {
-        return new StringBuilder().append(l.getBlockX()).append(separator).append(l.getBlockY()).append(separator).append(l.getBlockZ()).toString();
+        return String.valueOf(l.getBlockX()) + separator + l.getBlockY() + separator + l.getBlockZ();
     }
 
     public Set<Location> getLocations() {
@@ -54,7 +54,7 @@ public class Selection {
         final String k = generateLocationKey(l);
         if (!locations.containsKey(k)) {
             locations.put(k, l);
-//            materials.put(k, l.getBlock().getType());
+            materials.put(k, l.getBlock().getType());
         }
         return this;
     }
@@ -88,8 +88,8 @@ public class Selection {
         return this;
     }
 
-    public Selection sprinkle(final Particle p, final double amount) {
-        locations.forEach((k, l) -> l.getWorld().spawnParticle(l, p, amount));
+    public Selection sprinkle(final Particle p, final int amount) {
+        locations.forEach((k, l) -> l.getWorld().spawnParticle(p, l, amount));
         return this;
     }
 
