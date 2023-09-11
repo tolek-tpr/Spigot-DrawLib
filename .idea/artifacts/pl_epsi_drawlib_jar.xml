@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="pl.epsi.drawlib:jar">
+    <output-path>$PROJECT_DIR$/target/artifacts</output-path>
+    <root id="archive" name="pl.epsi.drawlib.jar">
+      <element id="module-output" name="pl.epsi.drawlib" />
+    </root>
+  </artifact>
+</component>
