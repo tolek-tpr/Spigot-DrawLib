@@ -50,4 +50,8 @@ public class ExampleGui {
         });
     }
 
+    public void setItem(int slot, ItemStack item) {
+        inv.setItem(slot, item);
+    }
+
 }
