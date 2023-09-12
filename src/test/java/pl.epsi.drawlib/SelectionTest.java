@@ -1,8 +1,6 @@
 package pl.epsi.drawlib;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -12,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class SelectionTest {
 
-    @Mock
     private World world;
 
     @Test public void union_emptySelections() {
@@ -91,7 +88,7 @@ public class SelectionTest {
         final Selection s = new Selection().add(l);
         s.stroke(Material.STONE);
 
-        assertEquals(Material.AIR, l.getBlock().getType());
-        assertEquals(Material.STONE, s.getOriginalMaterialAt(l));
+        assertEquals(Material.STONE, l.getBlock().getType());
+        assertEquals(Material.AIR, s.getOriginalMaterialAt(l));
     }
 }

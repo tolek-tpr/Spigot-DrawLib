@@ -1,10 +1,11 @@
-package pl.epsi.drawlib;
+package pl.epsi.drawlib.gui;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import pl.epsi.drawlib.gui.ExampleGui;
 
 public class GuiListener implements Listener {
 
