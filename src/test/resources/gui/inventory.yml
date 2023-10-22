@@ -1,0 +1,19 @@
+EmptyForm:
+  type: Form
+  title: "An empty form"
+
+NonForm:
+  type: Button
+  title: "This should cause an exception"
+
+BasicButtonForm:
+  type: Form
+  title: "A form with two buttons"
+  color: YELLOW # can be title-color: COLORIZE to use minecraft color codes
+  items:
+    - ok:
+        type: Button
+        text: "OK"
+    - cancel:
+        type: Button
+        text: "Cancel"

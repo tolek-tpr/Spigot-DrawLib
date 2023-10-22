@@ -1,8 +1,0 @@
-exampleForm:
-  type: Form
-  title: Dupa
-  color: YELLOW # can be title-color: COLORIZE to use minecraft color codes
-  widgets:
-    - ok:
-        type: Button
-        text: "No że się zgadzasz"
