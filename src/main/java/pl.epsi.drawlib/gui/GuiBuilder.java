@@ -15,26 +15,29 @@ import java.util.Map;
 
 public class GuiBuilder {
 
-    public static Inventory readInventoryYamlFile(final String inventoryFile, final String inventoryName) {
-        File f = new File("plugins/drawlib/guis/" + inventoryFile);
-        FileConfiguration inventoryData = YamlConfiguration.loadConfiguration(f);
-        ConfigurationSection section = inventoryData.getConfigurationSection(inventoryName);
+    public static Inventory fromFile(final String file, final String inventoryName) {
+        final File f = new File(file);
+        final FileConfiguration inventoryData = YamlConfiguration.loadConfiguration(f);
+        final ConfigurationSection section = inventoryData.getConfigurationSection(inventoryName);
         System.out.print(section);
-        return ((Form) parseYamlNode(section)).buildInventory();
-
+        return fromNode(section, "Form").toInventory();
     }
 
-    public static Widget parseYamlNode(final ConfigurationSection configuration) {
-        List<String> sections = configuration.getStringList("widgets");
-        final Map<String, String> settings = new HashMap<>();
-
+    private static Widget fromNode(final ConfigurationSection configuration, final String type) {
         try {
-            Widget w = Widget.forType(settings.get("type")).newInstance().configure(configuration);
-            sections.forEach(section -> w.addChild(parseYamlNode((ConfigurationSection) configuration.get(section))));
-            return w;
+            final Widget widget = Widget.forType(type).newInstance().configure(configuration);
+            configuration.getStringList("items").forEach(
+                    item -> widget.addChild(fromNode(configuration.get(item)))
+            );
+            return widget;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            return new Memo().setText("Could not initialize widget type " + settings.get("name"));
+            return new Memo().setText("should not initialize widget type " + type);
         }
+    }
+
+    public static Widget fromNode(final ConfigurationSection configuration) {
+        final String type = configuration.get("type").toString();
+        return fromNode(configuration, type);
     }
 
 }
